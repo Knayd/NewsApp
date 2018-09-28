@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".fragments.NewsDetailsFragment"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/details_fragment_headline"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        tools:text="HEADLINE"/>
+
+    <TextView
+        android:id="@+id/details_fragment_bodyText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        tools:text="Bodytext Bodytext Bodytext Bodytext Bodytext"/>
+
+    <TextView
+        android:id="@+id/details_fragment_section"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        tools:text="Section"/>
+
+    <TextView
+        android:id="@+id/details_fragment_thumbnail"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        tools:text="Thumbnail"
+        />
+
+    <TextView
+        android:id="@+id/details_fragment_website"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        tools:text="Website"
+        />
+</LinearLayout>

@@ -1,5 +1,6 @@
 package com.example.applaudo.newsapp.main;
 
+import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
@@ -7,12 +8,13 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 
-import com.example.applaudo.newsapp.fragments.NewsFragment;
 import com.example.applaudo.newsapp.R;
+import com.example.applaudo.newsapp.fragments.NewsFragment;
 
 public class MainActivity extends AppCompatActivity {
+
+    NewsFragmentPagerAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -22,16 +24,15 @@ public class MainActivity extends AppCompatActivity {
         //Find the ViewPager in the activity
         ViewPager viewPager = findViewById(R.id.viewpager);
         //Set the adapter
-        NewsFragmentPagerAdapter adapter = new NewsFragmentPagerAdapter(getSupportFragmentManager());
+        adapter = new NewsFragmentPagerAdapter(getSupportFragmentManager());
         //Bind the adapter with the ViewPager
         viewPager.setAdapter(adapter);
         //Setting the tablayout
         TabLayout tabLayout = findViewById(R.id.tablayout);
         tabLayout.setupWithViewPager(viewPager);
-
     }
 
-    //Adapter for the ViewPager
+    //region Adapter for the ViewPager
     private class NewsFragmentPagerAdapter extends FragmentPagerAdapter {
         //Array for the tab tittles
         private int[] mTabTitles = {R.string.tab1,R.string.tab2,R.string.tab3,R.string.tab4};
@@ -72,5 +73,6 @@ public class MainActivity extends AppCompatActivity {
             return 4;
         }
     }
+    //endregion
 
 }

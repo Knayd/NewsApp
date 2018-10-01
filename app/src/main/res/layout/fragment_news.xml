@@ -8,13 +8,6 @@
 
     <!-- TODO: Update blank fragment layout -->
 
-    <ProgressBar
-        android:id="@+id/fragment_progress_bar"
-        style="?android:attr/progressBarStyle"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        />
-
     <android.support.v7.widget.RecyclerView
         android:id="@+id/fragment_recycler"
         android:layout_width="match_parent"

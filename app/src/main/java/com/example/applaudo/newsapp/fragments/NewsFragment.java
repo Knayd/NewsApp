@@ -36,7 +36,6 @@ public class NewsFragment extends Fragment implements NewsAdapter.OnNewsClicked,
 
         RecyclerView rv = v.findViewById(R.id.fragment_recycler);
 
-
         LinearLayoutManager llm = new LinearLayoutManager(getContext());
 
         //The contract for the interface
@@ -59,10 +58,9 @@ public class NewsFragment extends Fragment implements NewsAdapter.OnNewsClicked,
         startActivity(intent);
     }
 
-
     @Override
     public Loader<ArrayList<News>> onCreateLoader(int id, Bundle args) {
-        //Create a new loader from the given URL
+        //Create a new loader from the given URL's
 
         //Retrieve the tab position from the PagerAdapter
         Bundle bundle = getArguments();
@@ -87,10 +85,9 @@ public class NewsFragment extends Fragment implements NewsAdapter.OnNewsClicked,
     }
 
     @Override
-    public void onLoadFinished(Loader<ArrayList<News>> loader, ArrayList<News> data) {
+    public void onLoadFinished(Loader<ArrayList<News>> loader, ArrayList<News> data){
         //Here sets the data for the recycler
         mAdapter.setmNewsList(data);
-
     }
 
     @Override

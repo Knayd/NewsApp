@@ -18,14 +18,19 @@ public class NewsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private ArrayList<News> mNewsList;
     private OnNewsClicked mCallback;
 
+    //Setter for updating the data after the null list is already "loaded"
+    public void setmNewsList(ArrayList<News> mNewsList) {
+        this.mNewsList = mNewsList;
+        notifyDataSetChanged();
+    }
+
     //Interface to open the details
     public interface OnNewsClicked {
         void onNewsClicked(String headline, String bodyText, String section, String thumbnail, String website);
     }
 
 
-    public NewsAdapter(ArrayList<News> mNewsList, OnNewsClicked mCallback) {
-        this.mNewsList = mNewsList;
+    public NewsAdapter(OnNewsClicked mCallback) {
         this.mCallback = mCallback;
     }
 
@@ -43,7 +48,14 @@ public class NewsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     @Override
     public int getItemCount() {
-        return mNewsList.size();
+
+        //The first time the recycler is created, the list is null
+        if (mNewsList==null) {
+            return 0;
+        }
+        else {
+            return mNewsList.size();
+        }
     }
 
      class NewsViewHolder extends RecyclerView.ViewHolder {

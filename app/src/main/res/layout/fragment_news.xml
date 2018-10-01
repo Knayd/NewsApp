@@ -7,11 +7,13 @@
     tools:context=".fragments.NewsFragment">
 
     <!-- TODO: Update blank fragment layout -->
-    <TextView
-        android:id="@+id/textView"
+
+    <ProgressBar
+        android:id="@+id/fragment_progress_bar"
+        style="?android:attr/progressBarStyle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/hello_blank_fragment" />
+        />
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/fragment_recycler"

@@ -72,7 +72,7 @@ public class NewsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     public int getItemCount() {
 
             if (mNewsList.size()==0){
-                //If the list is empty, I will force it to load 1 element which will be only the progress bar
+                //If the list is empty, I will force it to load 1 element which will be the progress bar
                 return 1;
             }
             else {
@@ -125,10 +125,10 @@ public class NewsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             });
         }
     }
-    class LoadViewHolder extends RecyclerView.ViewHolder {
+    private class LoadViewHolder extends RecyclerView.ViewHolder {
         private ProgressBar mProgressBar;
 
-        public LoadViewHolder(View itemView) {
+        private LoadViewHolder(View itemView) {
             super(itemView);
             mProgressBar = itemView.findViewById(R.id.recycler_progressbar);
         }

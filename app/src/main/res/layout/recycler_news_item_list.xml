@@ -20,6 +20,7 @@
         android:singleLine="true"
         android:textSize="24sp"
         android:textStyle="bold"
+        android:textAllCaps="true"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.1"
         app:layout_constraintStart_toEndOf="@id/recycler_thumbnail"

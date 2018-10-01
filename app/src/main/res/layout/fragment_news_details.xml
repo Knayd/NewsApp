@@ -1,40 +1,87 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".fragments.NewsDetailsFragment"
     android:orientation="vertical">
 
-    <TextView
-        android:id="@+id/details_fragment_headline"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        tools:text="HEADLINE"/>
+        android:orientation="vertical">
 
-    <TextView
-        android:id="@+id/details_fragment_bodyText"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        tools:text="Bodytext Bodytext Bodytext Bodytext Bodytext"/>
+        <TextView
+            android:id="@+id/details_fragment_headline"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginStart="8dp"
+            android:textAppearance="?android:textAppearanceLarge"
+            android:textStyle="bold"
+            android:justificationMode="inter_word"
+            android:textAllCaps="true"
+            tools:text="HEADLINE" />
 
-    <TextView
-        android:id="@+id/details_fragment_section"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        tools:text="Section"/>
+        <TextView
+            android:id="@+id/details_fragment_section"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            android:textSize="20sp"
+            android:textStyle="italic"
+            tools:text="Section" />
 
-    <TextView
-        android:id="@+id/details_fragment_thumbnail"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        tools:text="Thumbnail"
-        />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:orientation="vertical"
+            android:layout_margin="8dp"
+            android:background="@android:color/darker_gray"
+            />
 
-    <TextView
-        android:id="@+id/details_fragment_website"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        tools:text="Website"
-        />
-</LinearLayout>
+        <TextView
+            android:id="@+id/details_fragment_thumbnail"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginStart="8dp"
+            tools:text="Thumbnail" />
+
+        <TextView
+            android:id="@+id/details_fragment_bodyText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginStart="8dp"
+            android:textAppearance="?android:textAppearanceMedium"
+            android:justificationMode="inter_word"
+            android:lineSpacingExtra="4sp"
+            android:textColor="@android:color/black"
+            tools:text="Bodytext Bodytext Bodytext Bodytext Bodytext" />
+
+        <TextView
+            android:id="@+id/details_fragment_website"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginStart="8dp"
+            android:textAlignment="center"
+            android:padding="8dp"
+            android:textAppearance="?android:textAppearanceLarge"
+            android:textColor="@android:color/holo_blue_dark"
+            tools:text="Website" />
+
+    </LinearLayout>
+
+
+
+</ScrollView>

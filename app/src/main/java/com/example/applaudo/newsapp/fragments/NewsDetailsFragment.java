@@ -1,5 +1,7 @@
 package com.example.applaudo.newsapp.fragments;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -42,7 +44,20 @@ public class NewsDetailsFragment extends Fragment {
             mSection.setText(bundle.getString(EXT_DETAILS_SECTION));
             mThumbnail.setText(bundle.getString(EXT_DETAILS_THUMBNAIL));
             mWebsite.setText(bundle.getString(EXT_DETAILS_WEBSITE));
+
+            //To open the new's page when the URL is clicked
+            mWebsite.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    String url = mWebsite.getText().toString();
+                    Intent intent = new Intent(Intent.ACTION_VIEW);
+                    intent.setData(Uri.parse(url));
+                    startActivity(intent);
+                }
+            });
         }
+
+
 
         return v;
     }

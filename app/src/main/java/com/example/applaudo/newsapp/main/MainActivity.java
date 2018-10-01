@@ -16,6 +16,8 @@ public class MainActivity extends AppCompatActivity {
 
     NewsFragmentPagerAdapter adapter;
 
+    public static final String TAB = "TAB_POSITION";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -54,18 +56,10 @@ public class MainActivity extends AppCompatActivity {
             NewsFragment newsFragment = new NewsFragment();
             //Sends the position to the new Fragment so it can load different data based on the position
             Bundle tabPosition = new Bundle();
-            tabPosition.putInt("tabPosition", position);
+            tabPosition.putInt(TAB, position);
             newsFragment.setArguments(tabPosition);
 
-            switch (position) {
-                //Even though I'll always return the fragment's instance, it needs to be inside a switch
-                case 0:
-                case 1:
-                case 2:
-                default:
-                    return newsFragment;
-            }
-
+            return newsFragment;
         }
 
         @Override
@@ -74,5 +68,4 @@ public class MainActivity extends AppCompatActivity {
         }
     }
     //endregion
-
 }

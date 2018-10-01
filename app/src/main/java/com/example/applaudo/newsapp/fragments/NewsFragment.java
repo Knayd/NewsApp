@@ -18,6 +18,7 @@ import android.widget.Toast;
 import com.example.applaudo.newsapp.R;
 import com.example.applaudo.newsapp.adapter.NewsAdapter;
 import com.example.applaudo.newsapp.loader.NewsLoader;
+import com.example.applaudo.newsapp.main.MainActivity;
 import com.example.applaudo.newsapp.main.NewsDetailsActivity;
 import com.example.applaudo.newsapp.models.News;
 import com.example.applaudo.newsapp.query.Query;
@@ -65,7 +66,7 @@ public class NewsFragment extends Fragment implements NewsAdapter.OnNewsClicked,
         //Retrieve the tab position from the PagerAdapter
         Bundle bundle = getArguments();
         if (bundle != null) {
-            int tabPosition = bundle.getInt("tabPosition");
+            int tabPosition = bundle.getInt(MainActivity.TAB);
             //Return different loaders with different URL's based on tab position
             switch (tabPosition) {
                 case 0:
@@ -92,6 +93,5 @@ public class NewsFragment extends Fragment implements NewsAdapter.OnNewsClicked,
 
     @Override
     public void onLoaderReset(Loader<ArrayList<News>> loader) {
-        Toast.makeText(getContext(), "Reset", Toast.LENGTH_SHORT).show();
     }
 }

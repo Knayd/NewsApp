@@ -37,7 +37,7 @@ public class NewsDetailsActivity extends AppCompatActivity {
         fragmentTransaction.commit();
     }
 
-    //Factory method
+
     public static Intent getInstance(Context context, String headline, String bodyText, String section, String thumbnail, String website) {
 
         Intent intent = new Intent(context,NewsDetailsActivity.class);

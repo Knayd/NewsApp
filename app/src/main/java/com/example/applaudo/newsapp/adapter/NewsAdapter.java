@@ -5,6 +5,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Filter;
+import android.widget.Filterable;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
@@ -15,20 +17,24 @@ import com.example.applaudo.newsapp.R;
 import com.example.applaudo.newsapp.models.News;
 
 import java.util.ArrayList;
+import java.util.List;
 
-public class NewsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+public class NewsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> implements Filterable {
 
     private static final int TYPE_LOAD = -1;
     private static final int TYPE_ITEM = -2;
 
     private ArrayList<News> mNewsList = new ArrayList<>(); //This is so the size returns 0 at first load.
+    private ArrayList<News> mNewsListFull; //This is to do the filtering
     private OnNewsClicked mCallback;
 
     //Setter for updating the data after the null list is already "loaded"
     public void setmNewsList(ArrayList<News> mNewsList) {
         this.mNewsList = mNewsList;
+        mNewsListFull = new ArrayList<>(mNewsList); //Creates the copy with the same data as in the list
         notifyDataSetChanged();
     }
+
 
     //Interface to open the details
     public interface OnNewsClicked {
@@ -133,5 +139,65 @@ public class NewsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             mProgressBar = itemView.findViewById(R.id.recycler_progressbar);
         }
     }
+
+    //region Filtering(SearchView)
+    @Override
+    public Filter getFilter() {
+        return newsFilter;
+    }
+
+    private Filter newsFilter = new Filter() {
+        @Override
+        protected FilterResults performFiltering(CharSequence constraint) {
+            //This runs on the background thread
+            List<News> filteredList = new ArrayList<>();
+
+            if(constraint==null || constraint.length() == 0){
+                //If there is no input, load everything
+
+                //But first make sure the list is not empty
+                //This is because when first loaded, the list is actually empty
+                if (mNewsListFull != null) {
+                    filteredList.addAll(mNewsListFull);
+                }
+
+
+            } else {
+                //Something typed into the SearchView
+
+                String filterPattern = constraint.toString().toLowerCase().trim();
+
+                //Iterate over all the items to find matches
+
+                for (News news : mNewsListFull){
+                    if(news.getmHeadline().toLowerCase().contains(filterPattern)){
+                        //If the item meets the condition, added to the list for it to be displayed
+                        filteredList.add(news);
+                    }
+                }
+
+            }
+
+            FilterResults results = new FilterResults();
+            results.values = filteredList;
+
+            return results;
+        }
+
+        @Override
+        protected void publishResults(CharSequence charSequence, FilterResults results) {
+            //This runs on the UI
+
+            if (results != null) {
+                //It first clears the current list
+                mNewsList.clear();
+                //Fills the list with the filtered data
+                mNewsList.addAll((List) results.values);
+                notifyDataSetChanged();
+            }
+        }
+    };
+
+    //endregion
 
 }

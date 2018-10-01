@@ -58,7 +58,6 @@ public class NewsDetailsFragment extends Fragment {
         }
 
 
-
         return v;
     }
 }

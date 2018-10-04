@@ -1,17 +1,14 @@
 package com.example.applaudo.newsapp.adapter;
 
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Filter;
 import android.widget.Filterable;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.applaudo.newsapp.R;
 import com.example.applaudo.newsapp.models.News;
@@ -38,7 +35,7 @@ public class NewsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> i
 
     //Interface to open the details
     public interface OnNewsClicked {
-        void onNewsClicked(String headline, String bodyText, String section, String thumbnail, String website);
+        void onNewsClicked(String headline, String bodyText, String section, String thumbnail, String website,String id);
     }
 
 
@@ -112,8 +109,8 @@ public class NewsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> i
 
         //Sets the data to the view
         void bindView(final ArrayList<News> list, final int position) {
-            mHeadLine.setText(list.get(position).getmHeadline());
-            mSection.setText(list.get(position).getmSection());
+            mHeadLine.setText(list.get(position).getHeadline());
+            mSection.setText(list.get(position).getSection());
             mThumbnail.setImageResource(R.mipmap.ic_launcher_round); //TODO: just a placeholder
 
             //Listens when an item is clicked on the recycler and sends the data of the current item
@@ -121,11 +118,12 @@ public class NewsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> i
                 @Override
                 public void onClick(View view) {
                     mCallback.onNewsClicked(
-                            list.get(position).getmHeadline(),
-                            list.get(position).getmBodyText(),
-                            list.get(position).getmSection(),
-                            list.get(position).getmThumbnail(),
-                            list.get(position).getmWebSite()
+                            list.get(position).getHeadline(),
+                            list.get(position).getBodyText(),
+                            list.get(position).getSection(),
+                            list.get(position).getThumbnail(),
+                            list.get(position).getWebSite(),
+                            list.get(position).getId()
                     );
                 }
             });
@@ -170,7 +168,7 @@ public class NewsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> i
                 //Iterate over all the items to find matches
 
                 for (News news : mNewsListFull){
-                    if(news.getmHeadline().toLowerCase().contains(filterPattern)){
+                    if(news.getHeadline().toLowerCase().contains(filterPattern)){
                         //If the item meets the condition, added to the list for it to be displayed
                         filteredList.add(news);
                     }

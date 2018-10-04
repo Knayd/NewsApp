@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.applaudo.newsapp.R;
 
@@ -21,6 +22,8 @@ public class NewsDetailsFragment extends Fragment {
     private final static String EXT_DETAILS_SECTION = "EXT_DETAILS_SECTION";
     private final static String EXT_DETAILS_THUMBNAIL = "EXT_DETAILS_THUMBNAIL";
     private final static String EXT_DETAILS_WEBSITE = "EXT_DETAILS_WEBSITE";
+    private final static String EXT_DETAILS_ID = "EXT_DETAILS_ID";
+
 
     private TextView mHeadLine, mBodyText, mSection, mThumbnail, mWebsite;
 
@@ -38,6 +41,8 @@ public class NewsDetailsFragment extends Fragment {
             mSection = v.findViewById(R.id.details_fragment_section);
             mThumbnail = v.findViewById(R.id.details_fragment_thumbnail);
             mWebsite = v.findViewById(R.id.details_fragment_website);
+
+            Toast.makeText(getContext(), bundle.getString(EXT_DETAILS_ID), Toast.LENGTH_SHORT).show();
 
             mHeadLine.setText(bundle.getString(EXT_DETAILS_HEADLINE));
             mBodyText.setText(bundle.getString(EXT_DETAILS_BODYTEXT));

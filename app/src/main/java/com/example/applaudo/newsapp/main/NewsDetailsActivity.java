@@ -17,6 +17,7 @@ public class NewsDetailsActivity extends AppCompatActivity {
     private final static String EXT_DETAILS_SECTION = "EXT_DETAILS_SECTION";
     private final static String EXT_DETAILS_THUMBNAIL = "EXT_DETAILS_THUMBNAIL";
     private final static String EXT_DETAILS_WEBSITE = "EXT_DETAILS_WEBSITE";
+    private final static String EXT_DETAILS_ID = "EXT_DETAILS_ID";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,7 +39,7 @@ public class NewsDetailsActivity extends AppCompatActivity {
     }
 
 
-    public static Intent getInstance(Context context, String headline, String bodyText, String section, String thumbnail, String website) {
+    public static Intent getInstance(Context context, String headline, String bodyText, String section, String thumbnail, String website, String id) {
 
         Intent intent = new Intent(context,NewsDetailsActivity.class);
         intent.putExtra(EXT_DETAILS_HEADLINE, headline);
@@ -46,6 +47,7 @@ public class NewsDetailsActivity extends AppCompatActivity {
         intent.putExtra(EXT_DETAILS_SECTION, section);
         intent.putExtra(EXT_DETAILS_THUMBNAIL, thumbnail);
         intent.putExtra(EXT_DETAILS_WEBSITE, website);
+        intent.putExtra(EXT_DETAILS_ID, id);
         return intent;
     }
 }

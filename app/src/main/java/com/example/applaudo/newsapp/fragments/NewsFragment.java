@@ -114,9 +114,9 @@ public class NewsFragment extends Fragment implements NewsAdapter.OnNewsClicked,
 
     //Implementation of the interface
     @Override
-    public void onNewsClicked(String headline, String bodyText, String section, String thumbnail, String website) {
+    public void onNewsClicked(String headline, String bodyText, String section, String thumbnail, String website, String id) {
         //Here I send the data to the DetailsActivity
-        Intent intent = NewsDetailsActivity.getInstance(getContext(), headline, bodyText, section, thumbnail, website);
+        Intent intent = NewsDetailsActivity.getInstance(getContext(), headline, bodyText, section, thumbnail, website, id);
         startActivity(intent);
     }
 
@@ -150,8 +150,8 @@ public class NewsFragment extends Fragment implements NewsAdapter.OnNewsClicked,
                 return new NewsLoader(getContext(), QUERY_SEARCH);
             }
         } else {
-            //Block for the CursorLoader
-            return null; //TODO: Just meanwhile
+
+            return null; //TODO: Block for the CursorLoader
         }
 
 

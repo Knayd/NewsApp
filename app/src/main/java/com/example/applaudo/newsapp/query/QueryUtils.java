@@ -46,13 +46,16 @@ public class QueryUtils {
 
             for (int i = 0; i < resultsArray.length(); i++) {
 
-                 String headline,bodyText,section,thumbnail,website;
+                 String id,headline,bodyText,section,thumbnail,website;
                 //TODO: All the fields are optional so it doesn't fall into the catch and lose the data if one field is missing.
 
-                 //This is where I get the section name
+                 //This is where I get the section name and the Id
                 JSONObject newsJsonData = resultsArray.getJSONObject(i);
 
                 section = newsJsonData.optString("sectionName");
+                id = newsJsonData.optString("id");
+
+
 
                 //This is where I get all the other fields
                 JSONObject newsJsonDataExtra = newsJsonData.getJSONObject("fields");
@@ -63,13 +66,14 @@ public class QueryUtils {
                 thumbnail = newsJsonDataExtra.optString("thumbnail");
 
                 //Checks if the JSON didn't have the required data
+                id = checkEmptyResponse(id);
                 headline = checkEmptyResponse(headline);
                 bodyText = checkEmptyResponse(bodyText);
                 website = checkEmptyResponse(website);
                 section = checkEmptyResponse(section);
                 thumbnail = checkEmptyResponse(thumbnail);
 
-                newsList.add(new News(headline,bodyText,section,thumbnail,website));
+                newsList.add(new News(headline,bodyText,section,thumbnail,website,id));
             }
 
         } catch (JSONException e) {

@@ -1,7 +1,5 @@
 <resources>
     <string name="app_name">NewsApp</string>
-
-    <!-- TODO: Remove or change this placeholder text -->
     <string name="tab1">Sports</string>
     <string name="tab2">Politics</string>
     <string name="tab3">Social</string>

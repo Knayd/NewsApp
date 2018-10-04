@@ -2,13 +2,22 @@ package com.example.applaudo.newsapp.models;
 
 public class News {
 
+    private String mId;
     private String mHeadline;
     private String mBodyText;
     private String mSection;
     private String mThumbnail;
     private String mWebSite;
 
-    public String getmHeadline() {
+    public String getId() {
+        return mId;
+    }
+
+    public void setmId(String mId) {
+        this.mId = mId;
+    }
+
+    public String getHeadline() {
         return mHeadline;
     }
 
@@ -16,7 +25,7 @@ public class News {
         this.mHeadline = mHeadline;
     }
 
-    public String getmBodyText() {
+    public String getBodyText() {
         return mBodyText;
     }
 
@@ -24,7 +33,7 @@ public class News {
         this.mBodyText = mBodyText;
     }
 
-    public String getmSection() {
+    public String getSection() {
         return mSection;
     }
 
@@ -32,7 +41,7 @@ public class News {
         this.mSection = mSection;
     }
 
-    public String getmThumbnail() {
+    public String getThumbnail() {
         return mThumbnail;
     }
 
@@ -40,7 +49,7 @@ public class News {
         this.mThumbnail = mThumbnail;
     }
 
-    public String getmWebSite() {
+    public String getWebSite() {
         return mWebSite;
     }
 
@@ -48,7 +57,8 @@ public class News {
         this.mWebSite = mWebSite;
     }
 
-    public News(String mHeadline, String mBodyText, String mSection, String mThumbnail, String mWebSite) {
+    public News(String mHeadline, String mBodyText, String mSection, String mThumbnail, String mWebSite,String mId) {
+        this.mId=mId;
         this.mHeadline = mHeadline;
         this.mBodyText = mBodyText;
         this.mSection = mSection;

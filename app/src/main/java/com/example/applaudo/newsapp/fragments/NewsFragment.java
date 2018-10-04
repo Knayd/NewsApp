@@ -11,6 +11,7 @@ import android.support.v4.content.Loader;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -33,7 +34,12 @@ public class NewsFragment extends Fragment implements NewsAdapter.OnNewsClicked,
 
     public static String LOADER_SEARCH_ARGS = "LOADER_SEARCH_ARGS";
 
+    private static final int LOADER_MAIN_ID =1;
+    private static final int LOADER_CURSOR_ID = 2;
+
     NewsAdapter mAdapter;
+    Handler handler = new Handler();
+
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
@@ -48,26 +54,37 @@ public class NewsFragment extends Fragment implements NewsAdapter.OnNewsClicked,
             }
             @Override
             public boolean onQueryTextChange(final String newText) {
-
-                //This is to initialize the search one second after the last key is pressed
-                Handler handler = new Handler();
+                //To avoid stacking the runnables
+                handler.removeCallbacksAndMessages(null);
+                //To delay the search
                 handler.postDelayed(new Runnable() {
                     @Override
                     public void run() {
-                        //Creates a new loader with another ID to handle the search
-                        LoaderManager loaderManager = getLoaderManager();
-
-                        //Stores the text and sends it to the onCreateLoader method
-                        Bundle loaderData = new Bundle();
-                        loaderData.putString(LOADER_SEARCH_ARGS,newText);
-
-                        loaderManager.initLoader(2,loaderData,NewsFragment.this);
+                        doSearch(newText);
                     }
                 },1000);
-
                 return false;
             }
         });
+    }
+
+    //Helper method to do the searching
+    private void doSearch(String searchTerm){
+        LoaderManager loaderManager = getLoaderManager();
+
+        //This to avoid doing the search on empty text
+        if(!TextUtils.isEmpty(searchTerm)){
+            //Stores the text and sends it to the onCreateLoader method
+            Bundle loaderData = new Bundle();
+            loaderData.putString(LOADER_SEARCH_ARGS,searchTerm);
+            //Restarts the current loader and sends the search params
+            loaderManager.restartLoader(LOADER_MAIN_ID,loaderData,NewsFragment.this);
+            Toast.makeText(getContext(),searchTerm, Toast.LENGTH_SHORT).show();
+        }
+        else {
+            //To reload the data when the text is empty
+            loaderManager.restartLoader(LOADER_MAIN_ID,null,NewsFragment.this);
+        }
     }
 
     @Nullable
@@ -89,7 +106,7 @@ public class NewsFragment extends Fragment implements NewsAdapter.OnNewsClicked,
         rv.setLayoutManager(llm);
 
         LoaderManager loaderManager = getLoaderManager();
-        loaderManager.initLoader(1,null,this);
+        loaderManager.initLoader(LOADER_MAIN_ID,null,this);
 
         return v;
 
@@ -108,9 +125,10 @@ public class NewsFragment extends Fragment implements NewsAdapter.OnNewsClicked,
         //Create a new loader from the given URL's
 
         //Retrieve the tab position from the PagerAdapter
-        if(id==1) {
+        if(id==LOADER_MAIN_ID) {
             Bundle bundle = getArguments();
-            if (bundle != null) {
+            //Checks if nothing was send from the menu
+            if (args == null) {
                 int tabPosition = bundle.getInt(MainActivity.TAB);
                 //Return different loaders with different URL's based on tab position
                 switch (tabPosition) {
@@ -124,13 +142,16 @@ public class NewsFragment extends Fragment implements NewsAdapter.OnNewsClicked,
                         return new NewsLoader(getContext(), Query.QUERY_MUSIC);
                 }
             } else {
-                //It shouldn't ever get in here, but it was required because of the "if" statement
-                return null;
+                //Retrieving the search term sent from the SearchView
+                String searchTerm = args.getString(LOADER_SEARCH_ARGS);
+                //Building the URL to do the search
+                String QUERY_SEARCH = Query.BASE_URL + searchTerm + Query.API_KEY;
+
+                return new NewsLoader(getContext(), QUERY_SEARCH);
             }
         } else {
-            //Id should be "2" at this point
-            Toast.makeText(getContext(), args.getString(LOADER_SEARCH_ARGS), Toast.LENGTH_SHORT).show();
-            return new NewsLoader(getContext(), Query.QUERY_SEARCH);
+            //Block for the CursorLoader
+            return null; //TODO: Just meanwhile
         }
 
 

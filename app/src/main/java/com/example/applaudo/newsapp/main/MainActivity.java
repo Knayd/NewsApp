@@ -10,6 +10,7 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 
 import com.example.applaudo.newsapp.R;
+import com.example.applaudo.newsapp.data.NewsDbHelper;
 import com.example.applaudo.newsapp.fragments.NewsFragment;
 
 public class MainActivity extends AppCompatActivity {
@@ -32,6 +33,11 @@ public class MainActivity extends AppCompatActivity {
         //Setting the tablayout
         TabLayout tabLayout = findViewById(R.id.tablayout);
         tabLayout.setupWithViewPager(viewPager);
+
+        NewsDbHelper helper = new NewsDbHelper(this);
+
+        helper.getReadableDatabase();
+
     }
 
     //region Adapter for the ViewPager

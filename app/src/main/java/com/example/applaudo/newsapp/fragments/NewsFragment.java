@@ -1,6 +1,9 @@
 package com.example.applaudo.newsapp.fragments;
 
+import android.content.Context;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
@@ -18,6 +21,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.applaudo.newsapp.R;
@@ -92,20 +96,30 @@ public class NewsFragment extends Fragment implements NewsAdapter.OnNewsClicked,
 
         View v = inflater.inflate(R.layout.fragment_news,container, false);
 
-        //Enables the options search bar for the Fragment
-        setHasOptionsMenu(true);
+        //Checks for internet connection
+        // Get a reference to the ConnectivityManager to check state of network connectivity
+        ConnectivityManager connectivityManager = (ConnectivityManager) getContext().getSystemService(Context.CONNECTIVITY_SERVICE);
 
-        RecyclerView rv = v.findViewById(R.id.fragment_recycler);
+        // Get details on the currently active default data network
+        NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
+        if (networkInfo != null && networkInfo.isConnected() )
+        {
+            RecyclerView rv = v.findViewById(R.id.fragment_recycler);
 
-        LinearLayoutManager llm = new LinearLayoutManager(getContext());
-
-        //The contract for the interface
-        mAdapter = new NewsAdapter(this);
-        rv.setAdapter(mAdapter);
-        rv.setLayoutManager(llm);
-
-        LoaderManager loaderManager = getLoaderManager();
-        loaderManager.initLoader(LOADER_MAIN_ID,null,this);
+            LinearLayoutManager llm = new LinearLayoutManager(getContext());
+            //Enables the options search bar for the Fragment
+            setHasOptionsMenu(true);
+            LoaderManager loaderManager = getLoaderManager();
+            loaderManager.initLoader(LOADER_MAIN_ID,null,this);
+            Toast.makeText(getContext(), "Connected", Toast.LENGTH_SHORT).show();
+            //The contract for the interface
+            mAdapter = new NewsAdapter(this);
+            rv.setAdapter(mAdapter);
+            rv.setLayoutManager(llm);
+        } else {
+            TextView noConnection = v.findViewById(R.id.fragment_no_connection_msj);
+            noConnection.setVisibility(View.VISIBLE);
+        }
 
         return v;
 

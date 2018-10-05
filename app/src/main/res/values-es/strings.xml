@@ -6,5 +6,6 @@
     <string name="tab3">Social</string>
     <string name="tab4">Música</string>
     <string name="str_menu_search">Buscar noticias!</string>
-    <string name="str_no_connection">Verifica tu conexinón e intenta de nuevo.</string>
+    <string name="str_no_connection">Verifica tu conexión a Internet.</string>
+    <string name="str_no_results">Sin resultados.</string>
 </resources>

@@ -13,6 +13,8 @@ public class News {
         return mId;
     }
 
+    //TODO: Clean unused setters after finishing
+
     public void setmId(String mId) {
         this.mId = mId;
     }

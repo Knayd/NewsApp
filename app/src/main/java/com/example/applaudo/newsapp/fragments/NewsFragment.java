@@ -1,7 +1,9 @@
 package com.example.applaudo.newsapp.fragments;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
+import android.database.sqlite.SQLiteDatabase;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
@@ -26,6 +28,8 @@ import android.widget.Toast;
 
 import com.example.applaudo.newsapp.R;
 import com.example.applaudo.newsapp.adapter.NewsAdapter;
+import com.example.applaudo.newsapp.data.NewsContract;
+import com.example.applaudo.newsapp.data.NewsDbHelper;
 import com.example.applaudo.newsapp.loader.NewsLoader;
 import com.example.applaudo.newsapp.main.MainActivity;
 import com.example.applaudo.newsapp.main.NewsDetailsActivity;
@@ -120,6 +124,23 @@ public class NewsFragment extends Fragment implements NewsAdapter.OnNewsClicked,
             TextView noConnection = v.findViewById(R.id.fragment_no_connection_msj);
             noConnection.setVisibility(View.VISIBLE);
         }
+
+
+        NewsDbHelper helper = new NewsDbHelper(getContext());
+        SQLiteDatabase db = helper.getWritableDatabase();
+
+        ContentValues values = new ContentValues();
+
+        values.put(NewsContract.NewsEntry.COLUMN_NEWS_ID,"ID");
+        values.put(NewsContract.NewsEntry.COLUMN_NEWS_HEADLINE,"BodyText");
+        values.put(NewsContract.NewsEntry.COLUMN_NEWS_BODYTEXT,"BodyText");
+        values.put(NewsContract.NewsEntry.COLUMN_NEWS_SECTION,"BodyText");
+        values.put(NewsContract.NewsEntry.COLUMN_NEWS_THUMBNAIL,"BodyText");
+        values.put(NewsContract.NewsEntry.COLUMN_NEWS_WEBSITE,"BodyText");
+
+        long id = db.insert(NewsContract.NewsEntry.TABLE_NAME,null,values);
+
+        Toast.makeText(getContext(),String.valueOf(id), Toast.LENGTH_SHORT).show();
 
         return v;
 

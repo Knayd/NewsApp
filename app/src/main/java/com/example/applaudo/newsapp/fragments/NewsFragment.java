@@ -79,7 +79,6 @@ public class NewsFragment extends Fragment implements NewsAdapter.OnNewsClicked,
             loaderData.putString(LOADER_SEARCH_ARGS,searchTerm);
             //Restarts the current loader and sends the search params
             loaderManager.restartLoader(LOADER_MAIN_ID,loaderData,NewsFragment.this);
-            Toast.makeText(getContext(),searchTerm, Toast.LENGTH_SHORT).show();
         }
         else {
             //To reload the data when the text is empty

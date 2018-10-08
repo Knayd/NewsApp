@@ -20,6 +20,7 @@ public class NewsProvider extends ContentProvider {
     private static final int NEWS = 100;
 
     private static final int NEWSLATER = 200;
+    private static final int NEWSLATER_ID = 201;
 
     private static final int CATEGORY = 300;
 
@@ -34,6 +35,7 @@ public class NewsProvider extends ContentProvider {
 
         //NewsLater
         sUriMatcher.addURI(CONTENT_AUTHORITY, PATH_NEWSLATER,NEWSLATER);
+        sUriMatcher.addURI(CONTENT_AUTHORITY, PATH_NEWSLATER+"/*", NEWSLATER_ID);
 
         //Category
         sUriMatcher.addURI(CONTENT_AUTHORITY, PATH_CATEGORY,CATEGORY);
@@ -104,14 +106,12 @@ public class NewsProvider extends ContentProvider {
 
     @Override
     public String getType(Uri uri) {
-        // TODO: Implement this to handle requests for the MIME type of the data
         // at the given URI.
         throw new UnsupportedOperationException("Not yet implemented");
     }
 
     @Override
-    public int update(Uri uri, ContentValues values, String selection,
-                      String[] selectionArgs) {
+    public int update(Uri uri, ContentValues values, String selection, String[] selectionArgs) {
         return 0;
     }
 }

@@ -80,6 +80,17 @@
             android:textColor="@android:color/holo_blue_dark"
             tools:text="Website" />
 
+        <Button
+            android:id="@+id/details_fragment_btn_add_read_later"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            tools:text="Read later"/>
+
+        <Button
+            android:id="@+id/details_fragment_btn_remove_read_later"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            tools:text="Remove read later"/>
     </LinearLayout>
 
 

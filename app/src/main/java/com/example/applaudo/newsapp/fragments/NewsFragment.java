@@ -2,10 +2,13 @@ package com.example.applaudo.newsapp.fragments;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.CursorLoader;
 import android.content.Intent;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
@@ -38,6 +41,8 @@ import com.example.applaudo.newsapp.query.Query;
 
 import java.util.ArrayList;
 
+import static com.example.applaudo.newsapp.data.NewsContract.*;
+
 public class NewsFragment extends Fragment implements NewsAdapter.OnNewsClicked, LoaderManager.LoaderCallbacks<ArrayList<News>> {
 
     public static String LOADER_SEARCH_ARGS = "LOADER_SEARCH_ARGS";
@@ -45,8 +50,8 @@ public class NewsFragment extends Fragment implements NewsAdapter.OnNewsClicked,
     private static final int LOADER_MAIN_ID =1;
     private static final int LOADER_CURSOR_ID = 2;
 
-    NewsAdapter mAdapter;
-    Handler handler = new Handler();
+    private NewsAdapter mAdapter;
+    private Handler mHandler = new Handler();
 
 
     @Override
@@ -63,9 +68,9 @@ public class NewsFragment extends Fragment implements NewsAdapter.OnNewsClicked,
             @Override
             public boolean onQueryTextChange(final String newText) {
                 //To avoid stacking the runnables
-                handler.removeCallbacksAndMessages(null);
+                mHandler.removeCallbacksAndMessages(null);
                 //To delay the search
-                handler.postDelayed(new Runnable() {
+                mHandler.postDelayed(new Runnable() {
                     @Override
                     public void run() {
                         doSearch(newText);
@@ -100,47 +105,35 @@ public class NewsFragment extends Fragment implements NewsAdapter.OnNewsClicked,
 
         View v = inflater.inflate(R.layout.fragment_news,container, false);
 
+        LoaderManager loaderManager = getLoaderManager();
+
+        RecyclerView rv = v.findViewById(R.id.fragment_recycler);
+
+        LinearLayoutManager llm = new LinearLayoutManager(getContext());
+
         //Checks for internet connection
         // Get a reference to the ConnectivityManager to check state of network connectivity
         ConnectivityManager connectivityManager = (ConnectivityManager) getContext().getSystemService(Context.CONNECTIVITY_SERVICE);
 
         // Get details on the currently active default data network
         NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
+
         if (networkInfo != null && networkInfo.isConnected() )
         {
-            RecyclerView rv = v.findViewById(R.id.fragment_recycler);
-
-            LinearLayoutManager llm = new LinearLayoutManager(getContext());
             //Enables the options search bar for the Fragment
             setHasOptionsMenu(true);
-            LoaderManager loaderManager = getLoaderManager();
+
             loaderManager.initLoader(LOADER_MAIN_ID,null,this);
             Toast.makeText(getContext(), "Connected", Toast.LENGTH_SHORT).show();
-            //The contract for the interface
-            mAdapter = new NewsAdapter(this);
-            rv.setAdapter(mAdapter);
-            rv.setLayoutManager(llm);
+
         } else {
-            TextView noConnection = v.findViewById(R.id.fragment_no_connection_msj);
-            noConnection.setVisibility(View.VISIBLE);
+            loaderManager.initLoader(LOADER_CURSOR_ID,null,this);
         }
 
-
-        NewsDbHelper helper = new NewsDbHelper(getContext());
-        SQLiteDatabase db = helper.getWritableDatabase();
-
-        ContentValues values = new ContentValues();
-
-        values.put(NewsContract.NewsEntry.COLUMN_NEWS_ID,"ID");
-        values.put(NewsContract.NewsEntry.COLUMN_NEWS_HEADLINE,"BodyText");
-        values.put(NewsContract.NewsEntry.COLUMN_NEWS_BODYTEXT,"BodyText");
-        values.put(NewsContract.NewsEntry.COLUMN_NEWS_SECTION,"BodyText");
-        values.put(NewsContract.NewsEntry.COLUMN_NEWS_THUMBNAIL,"BodyText");
-        values.put(NewsContract.NewsEntry.COLUMN_NEWS_WEBSITE,"BodyText");
-
-        long id = db.insert(NewsContract.NewsEntry.TABLE_NAME,null,values);
-
-        Toast.makeText(getContext(),String.valueOf(id), Toast.LENGTH_SHORT).show();
+        //The contract for the interface
+        mAdapter = new NewsAdapter(this);
+        rv.setAdapter(mAdapter);
+        rv.setLayoutManager(llm);
 
         return v;
 
@@ -184,8 +177,9 @@ public class NewsFragment extends Fragment implements NewsAdapter.OnNewsClicked,
                 return new NewsLoader(getContext(), QUERY_SEARCH);
             }
         } else {
+            return null;
+            //return new CursorLoader(getContext(),NewsEntry.CONTENT_URI,null,null,null,null);
 
-            return null; //TODO: Block for the CursorLoader
         }
 
 
@@ -195,6 +189,10 @@ public class NewsFragment extends Fragment implements NewsAdapter.OnNewsClicked,
     public void onLoadFinished(Loader<ArrayList<News>> loader, ArrayList<News> data){
         //Here sets the data for the recycler
         mAdapter.setmNewsList(data);
+        //Inserting the data in the database
+        if (data.size()!=0) {
+            insertNewsList(data);
+        }
     }
 
     @Override
@@ -203,5 +201,55 @@ public class NewsFragment extends Fragment implements NewsAdapter.OnNewsClicked,
     }
 
 
+
+    //Helper method to insert the data in the database
+    private void insertNewsList(ArrayList<News> data){
+
+        Bundle bundle = getArguments();
+        int tabPosition = bundle.getInt(MainActivity.TAB);
+
+        for (int i = 0; i < data.size() ; i++) {
+            ContentValues values = new ContentValues();
+            //Checks if the field doesn't exist before doing the insert
+            if(!fieldExists(data.get(i).getId())){
+                values.put(NewsEntry.COLUMN_NEWS_ID,data.get(i).getId());
+                values.put(NewsEntry.COLUMN_NEWS_HEADLINE,data.get(i).getHeadline());
+                values.put(NewsEntry.COLUMN_NEWS_BODYTEXT,"BodyText"); //TODO: Placeholder
+                values.put(NewsEntry.COLUMN_NEWS_SECTION,data.get(i).getSection());
+                values.put(NewsEntry.COLUMN_NEWS_THUMBNAIL,data.get(i).getThumbnail());
+                values.put(NewsEntry.COLUMN_NEWS_WEBSITE,data.get(i).getWebSite());
+                //Category is based on the tab position
+                values.put(NewsEntry.COLUMN_NEWS_CATEGORY,tabPosition);
+
+                Uri newUri = getContext().getContentResolver().insert(NewsEntry.CONTENT_URI,values);
+
+                Toast.makeText(getContext(), newUri.toString(), Toast.LENGTH_SHORT).show();
+            }
+
+        }
+
+    }
+
+    //Helper method to check if the field already exists in the database
+    private boolean fieldExists(String id){
+
+        NewsDbHelper mDbHelper = new NewsDbHelper(getContext());
+        SQLiteDatabase db = mDbHelper.getReadableDatabase();
+
+        String projection[] = {
+                NewsEntry.COLUMN_NEWS_ID
+        };
+
+        String selection = "id=?";
+        String[] args = {id};
+
+        Cursor news =  db.query(NewsEntry.TABLE_NAME,projection,selection,args,null,null,null);
+
+        //This is so I can close the cursor
+        int checkCursor = news.getCount();
+        news.close();
+
+        return checkCursor != 0;
+    }
 
 }

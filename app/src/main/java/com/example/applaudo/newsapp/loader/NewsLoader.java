@@ -36,6 +36,8 @@ public class NewsLoader extends AsyncTaskLoader<ArrayList<News>> {
     @Override
     public ArrayList<News> loadInBackground() {
         //This is where the list is gonna be loaded
+
+
         if (mUrl == null) {
             return null;
         }

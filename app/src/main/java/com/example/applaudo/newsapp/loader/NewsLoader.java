@@ -21,6 +21,8 @@ import static com.example.applaudo.newsapp.data.NewsContract.*;
 
 public class NewsLoader extends AsyncTaskLoader<ArrayList<News>> {
 
+    private static final int TAB_READ_LATER = 4;
+
     //Query string
     private String mUrl;
     private int mCategory;
@@ -48,15 +50,23 @@ public class NewsLoader extends AsyncTaskLoader<ArrayList<News>> {
     public ArrayList<News> loadInBackground() {
         //This is where the list is gonna be filled
         ArrayList<News> newsList;
-
+        Cursor cursor;
         if (mUrl == null) {
-            //If the url is null, I know it is because there is no connection
+            //If the url is null, I know it is because there is no connection, or because the "Read me later"
+            //tab was tapped
             //So, here's where the data from the database will be fetched
 
-            String selection = NewsEntry.COLUMN_NEWS_CATEGORY+"=?";
-            String[] args = {String.valueOf(mCategory)};
+            if(mCategory!=TAB_READ_LATER){
+                //Retrieving from news table
+                String selection = NewsEntry.COLUMN_NEWS_CATEGORY+"=?";
+                String[] args = {String.valueOf(mCategory)};
 
-            Cursor cursor = getContext().getContentResolver().query(NewsEntry.CONTENT_URI,null,selection,args,null);
+                cursor = getContext().getContentResolver().query(NewsEntry.CONTENT_URI,null,selection,args,null);
+            } else {
+                //Retrieving from newslater table
+                cursor = getContext().getContentResolver().query(NewsLaterEntry.CONTENT_URI,null,null,null,null);
+
+            }
 
             return transformCursorToList(cursor);
 

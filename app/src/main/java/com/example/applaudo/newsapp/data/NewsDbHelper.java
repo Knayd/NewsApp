@@ -39,14 +39,9 @@ public class NewsDbHelper extends SQLiteOpenHelper {
                 +NewsLaterEntry.COLUMN_NEWSLATER_WEBSITE + " TEXT,"
                 +NewsLaterEntry.COLUMN_NEWSLATER_CATEGORY + " INTEGER)";
 
-        String SQL_CREATE_CATEGORY_TABLE = "CREATE TABLE " + CategoryEntry.TABLE_NAME+ "("
-                +CategoryEntry.COLUMN_CATEGORY_ID+ " INTEGER PRIMARY KEY NOT NULL,"
-                +CategoryEntry.COLUMN_CATEGORY_NAME+ " TEXT)";
-
 
         db.execSQL(SQL_CREATE_NEWS_TABLE);
         db.execSQL(SQL_CREATE_NEWSLATER_TABLE);
-        db.execSQL(SQL_CREATE_CATEGORY_TABLE);
     }
 
     @Override

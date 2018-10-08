@@ -43,7 +43,7 @@ public class MainActivity extends AppCompatActivity {
     //region Adapter for the ViewPager
     private class NewsFragmentPagerAdapter extends FragmentPagerAdapter {
         //Array for the tab tittles
-        private int[] mTabTitles = {R.string.tab1,R.string.tab2,R.string.tab3,R.string.tab4};
+        private int[] mTabTitles = {R.string.tab1,R.string.tab2,R.string.tab3,R.string.tab4,R.string.str_read_later_tab};
 
         NewsFragmentPagerAdapter(FragmentManager fm) {
             super(fm);
@@ -70,7 +70,7 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         public int getCount() {
-            return 4;
+            return 5;
         }
     }
     //endregion

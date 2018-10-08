@@ -166,8 +166,12 @@ public class NewsFragment extends Fragment implements NewsAdapter.OnNewsClicked,
                         return new NewsLoader(getContext(), Query.QUERY_POLITICS);
                     case 2:
                         return new NewsLoader(getContext(), Query.QUERY_SOCIAL);
-                    default:
+                    case 3:
                         return new NewsLoader(getContext(), Query.QUERY_MUSIC);
+                        default:
+                            //This is the case for the Read later tab
+                        return new NewsLoader(getContext(),null,tabPosition);
+
                 }
             } else {
                 //Retrieving the search term sent from the SearchView

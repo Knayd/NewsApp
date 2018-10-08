@@ -9,4 +9,5 @@
     <string name="str_no_results">No results found.</string>
     <string name="str_add_read_later"> Read Later </string>
     <string name="str_remove_read_later">Remove from "Read Later"</string>
+    <string name="str_read_later_tab">Read later</string>
 </resources>

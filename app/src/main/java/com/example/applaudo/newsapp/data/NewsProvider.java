@@ -76,6 +76,25 @@ public class NewsProvider extends ContentProvider {
         return ContentUris.withAppendedId(uri,id);
     }
 
+    @Override
+    public Cursor query(Uri uri, String[] projection, String selection, String[] selectionArgs, String sortOrder) {
+
+        // Get readable database
+        SQLiteDatabase database = mDbHelper.getReadableDatabase();
+
+        // This cursor will hold the result of the query
+        Cursor cursor=null;
+        final int match = sUriMatcher.match(uri);
+
+        switch (match) {
+            case NEWS:
+                cursor = database.query(NewsEntry.TABLE_NAME, projection, selection, selectionArgs, null, null, sortOrder);
+        }
+
+        return cursor;
+
+    }
+
 
     @Override
     public int delete(Uri uri, String selection, String[] selectionArgs) {
@@ -87,13 +106,6 @@ public class NewsProvider extends ContentProvider {
     public String getType(Uri uri) {
         // TODO: Implement this to handle requests for the MIME type of the data
         // at the given URI.
-        throw new UnsupportedOperationException("Not yet implemented");
-    }
-
-    @Override
-    public Cursor query(Uri uri, String[] projection, String selection,
-                        String[] selectionArgs, String sortOrder) {
-        // TODO: Implement this to handle query requests from clients.
         throw new UnsupportedOperationException("Not yet implemented");
     }
 

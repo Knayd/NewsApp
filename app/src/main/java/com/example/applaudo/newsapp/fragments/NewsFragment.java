@@ -152,11 +152,12 @@ public class NewsFragment extends Fragment implements NewsAdapter.OnNewsClicked,
         //Create a new loader from the given URL's
 
         //Retrieve the tab position from the PagerAdapter
+        Bundle bundle = getArguments();
+        int tabPosition = bundle.getInt(MainActivity.TAB);
         if(id==LOADER_MAIN_ID) {
-            Bundle bundle = getArguments();
+
             //Checks if nothing was send from the menu
             if (args == null) {
-                int tabPosition = bundle.getInt(MainActivity.TAB);
                 //Return different loaders with different URL's based on tab position
                 switch (tabPosition) {
                     case 0:
@@ -177,9 +178,8 @@ public class NewsFragment extends Fragment implements NewsAdapter.OnNewsClicked,
                 return new NewsLoader(getContext(), QUERY_SEARCH);
             }
         } else {
-            return null;
-            //return new CursorLoader(getContext(),NewsEntry.CONTENT_URI,null,null,null,null);
-
+            //To load the data from the database
+            return new NewsLoader(getContext(),null,tabPosition);
         }
 
 

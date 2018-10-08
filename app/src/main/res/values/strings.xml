@@ -7,4 +7,6 @@
     <string name="str_menu_search">Search News!</string>
     <string name="str_no_connection">Check your connection and try again.</string>
     <string name="str_no_results">No results found.</string>
+    <string name="str_add_read_later"> Read Later </string>
+    <string name="str_remove_read_later">Remove from "Read Later"</string>
 </resources>

@@ -1,6 +1,9 @@
 package com.example.applaudo.newsapp.fragments;
 
+import android.content.ContentValues;
 import android.content.Intent;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -9,13 +12,22 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.applaudo.newsapp.R;
+import com.example.applaudo.newsapp.data.NewsContract;
+import com.example.applaudo.newsapp.data.NewsDbHelper;
+import com.example.applaudo.newsapp.main.MainActivity;
+import com.example.applaudo.newsapp.models.News;
+
+import java.util.ArrayList;
+
+import static com.example.applaudo.newsapp.data.NewsContract.*;
 
 
-public class NewsDetailsFragment extends Fragment {
+public class NewsDetailsFragment extends Fragment implements View.OnClickListener {
 
     private final static String EXT_DETAILS_HEADLINE = "EXT_DETAILS_HEADLINE";
     private final static String EXT_DETAILS_BODYTEXT = "EXT_DETAILS_BODYTEXT";
@@ -26,6 +38,7 @@ public class NewsDetailsFragment extends Fragment {
 
 
     private TextView mHeadLine, mBodyText, mSection, mThumbnail, mWebsite;
+    private Button  mAddReadLater, mRemoveReadLater;
 
     @Nullable
     @Override
@@ -42,6 +55,9 @@ public class NewsDetailsFragment extends Fragment {
             mThumbnail = v.findViewById(R.id.details_fragment_thumbnail);
             mWebsite = v.findViewById(R.id.details_fragment_website);
 
+            mAddReadLater = v.findViewById(R.id.details_fragment_btn_add_read_later);
+            mRemoveReadLater = v.findViewById(R.id.details_fragment_btn_remove_read_later);
+
             Toast.makeText(getContext(), bundle.getString(EXT_DETAILS_ID), Toast.LENGTH_SHORT).show();
 
             mHeadLine.setText(bundle.getString(EXT_DETAILS_HEADLINE));
@@ -51,18 +67,117 @@ public class NewsDetailsFragment extends Fragment {
             mWebsite.setText(bundle.getString(EXT_DETAILS_WEBSITE));
 
             //To open the new's page when the URL is clicked
-            mWebsite.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    String url = mWebsite.getText().toString();
-                    Intent intent = new Intent(Intent.ACTION_VIEW);
-                    intent.setData(Uri.parse(url));
-                    startActivity(intent);
-                }
-            });
-        }
+            mWebsite.setOnClickListener(this);
 
+            //To add/remove from read later
+            mAddReadLater.setOnClickListener(this);
+            mRemoveReadLater.setOnClickListener(this);
+
+            mAddReadLater.setText(getResources().getString(R.string.str_add_read_later));
+            mRemoveReadLater.setText(getResources().getString(R.string.str_remove_read_later));
+
+            //To hide the buttons if the news exists in in "Read me later"
+            if(!fieldExists(bundle.getString(EXT_DETAILS_ID))){
+                mAddReadLater.setVisibility(View.VISIBLE);
+            } else {
+                mRemoveReadLater.setVisibility(View.VISIBLE);
+            }
+
+        }
 
         return v;
     }
+
+    private News getNewsObject(Bundle bundle){
+        News news = new News(
+                bundle.getString(EXT_DETAILS_HEADLINE),
+                bundle.getString(EXT_DETAILS_BODYTEXT),
+                bundle.getString(EXT_DETAILS_SECTION),
+                bundle.getString(EXT_DETAILS_THUMBNAIL),
+                bundle.getString(EXT_DETAILS_WEBSITE),
+                bundle.getString(EXT_DETAILS_ID)
+        );
+
+        return news;
+
+    }
+
+    @Override
+    public void onClick(View view) {
+        Bundle bundle = getArguments();
+        switch (view.getId()){
+            case R.id.details_fragment_website:
+                String url = mWebsite.getText().toString();
+                Intent intent = new Intent(Intent.ACTION_VIEW);
+                intent.setData(Uri.parse(url));
+                startActivity(intent);
+                break;
+            case R.id.details_fragment_btn_add_read_later:
+                mAddReadLater.setVisibility(View.GONE);
+                mRemoveReadLater.setVisibility(View.VISIBLE);
+                insertNewsLater(getNewsObject(bundle));
+                break;
+            case R.id.details_fragment_btn_remove_read_later:
+                mAddReadLater.setVisibility(View.VISIBLE);
+                mRemoveReadLater.setVisibility(View.GONE);
+                deleteNewsLater(getNewsObject(bundle));
+                break;
+
+        }
+
+    }
+
+    //TODO: Unify this method with the one in NewsFragment
+    //Helper method to check if the field already exists in the database
+    private boolean fieldExists(String id){
+
+        NewsDbHelper mDbHelper = new NewsDbHelper(getContext());
+        SQLiteDatabase db = mDbHelper.getReadableDatabase();
+
+        String projection[] = {
+                NewsLaterEntry.COLUMN_NEWSLATER_ID
+        };
+
+        String selection = "id=?";
+        String[] args = {id};
+
+        Cursor news =  db.query(NewsLaterEntry.TABLE_NAME,projection,selection,args,null,null,null);
+
+        //This is so I can close the cursor
+        int checkCursor = news.getCount();
+        news.close();
+
+        return checkCursor != 0;
+    }
+
+    private void insertNewsLater(News news){
+
+            ContentValues values = new ContentValues();
+            //Checks if the field doesn't exist before doing the insert
+            if(!fieldExists(news.getId())){
+                values.put(NewsLaterEntry.COLUMN_NEWSLATER_ID,news.getId());
+                values.put(NewsEntry.COLUMN_NEWS_HEADLINE,news.getHeadline());
+                values.put(NewsLaterEntry.COLUMN_NEWSLATER_BODYTEXT,"BodyText"); //TODO: Placeholder
+                values.put(NewsLaterEntry.COLUMN_NEWSLATER_SECTION,news.getSection());
+                values.put(NewsLaterEntry.COLUMN_NEWSLATER_THUMBNAIL,news.getThumbnail());
+                values.put(NewsLaterEntry.COLUMN_NEWSLATER_WEBSITE,news.getWebSite());
+
+                Uri newUri = getContext().getContentResolver().insert(NewsLaterEntry.CONTENT_URI,values);
+
+                Toast.makeText(getContext(), newUri.toString(), Toast.LENGTH_SHORT).show();
+            }
+
+        }
+
+        private void deleteNewsLater (News news) {
+            if(fieldExists(news.getId())){
+
+                String where = NewsLaterEntry.COLUMN_NEWSLATER_ID+"=?";
+                String[] args = {news.getId()};
+
+                int rowsDeleted = getContext().getContentResolver().delete(NewsLaterEntry.CONTENT_URI,where,args);
+
+                Toast.makeText(getContext(), String.valueOf(rowsDeleted), Toast.LENGTH_SHORT).show();
+            }
+        }
 }

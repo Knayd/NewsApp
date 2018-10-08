@@ -53,7 +53,7 @@ public class NewsLoader extends AsyncTaskLoader<ArrayList<News>> {
             //If the url is null, I know it is because there is no connection
             //So, here's where the data from the database will be fetched
 
-            String selection = "category=?";
+            String selection = NewsEntry.COLUMN_NEWS_CATEGORY+"=?";
             String[] args = {String.valueOf(mCategory)};
 
             Cursor cursor = getContext().getContentResolver().query(NewsEntry.CONTENT_URI,null,selection,args,null);

@@ -8,4 +8,6 @@
     <string name="str_menu_search">Buscar noticias!</string>
     <string name="str_no_connection">Verifica tu conexión a Internet.</string>
     <string name="str_no_results">Sin resultados.</string>
+    <string name="str_add_read_later">Leer después</string>
+    <string name="str_remove_read_later">Remover de \"Leer después\"</string>
 </resources>

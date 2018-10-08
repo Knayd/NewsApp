@@ -13,7 +13,6 @@ public final class NewsContract {
     //Constants for every table
     public static final String PATH_NEWS = "news";
     public static final String PATH_NEWSLATER = "newslater";
-    public static final String PATH_CATEGORY = "category";
 
 
     public static final class NewsEntry implements BaseColumns{
@@ -52,21 +51,6 @@ public final class NewsContract {
         public static final String COLUMN_NEWSLATER_THUMBNAIL = "thumbnail";
         public static final String COLUMN_NEWSLATER_WEBSITE = "website";
         public static final String COLUMN_NEWSLATER_CATEGORY = "category";
-
-    }
-
-    public static final class CategoryEntry implements BaseColumns{
-
-        //CREATE TABLE category (id INTEGER  PRIMARY KEY AUTOINCREMENT, name TEXT);
-
-        //Content Uri for the category table
-        public static final Uri CONTENT_URI = Uri.withAppendedPath(BASE_CONTENT_URI,PATH_CATEGORY);
-
-        //Table category
-        public static final String TABLE_NAME = "category";
-
-        public static final String COLUMN_CATEGORY_ID = "id";
-        public static final String COLUMN_CATEGORY_NAME = "name";
 
     }
 

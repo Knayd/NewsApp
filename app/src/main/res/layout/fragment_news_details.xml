@@ -84,12 +84,14 @@
             android:id="@+id/details_fragment_btn_add_read_later"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:visibility="gone"
             tools:text="Read later"/>
 
         <Button
             android:id="@+id/details_fragment_btn_remove_read_later"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:visibility="gone"
             tools:text="Remove read later"/>
     </LinearLayout>
 

@@ -30,7 +30,7 @@ public class NewsDbHelper extends SQLiteOpenHelper {
                 +NewsEntry.COLUMN_NEWS_WEBSITE + " TEXT,"
                 +NewsEntry.COLUMN_NEWS_CATEGORY + " INTEGER)";
 
-        String SQL_CREATE_NEWSLATER_TABLE ="CREATE TABLE " + CategoryEntry.TABLE_NAME+ "("
+        String SQL_CREATE_NEWSLATER_TABLE ="CREATE TABLE " + NewsLaterEntry.TABLE_NAME+ "("
                 +NewsLaterEntry.COLUMN_NEWSLATER_ID + " TEXT PRIMARY KEY NOT NULL,"
                 +NewsLaterEntry.COLUMN_NEWSLATER_HEADLINE + " TEXT,"
                 +NewsLaterEntry.COLUMN_NEWSLATER_BODYTEXT + " TEXT,"
@@ -39,7 +39,7 @@ public class NewsDbHelper extends SQLiteOpenHelper {
                 +NewsLaterEntry.COLUMN_NEWSLATER_WEBSITE + " TEXT,"
                 +NewsLaterEntry.COLUMN_NEWSLATER_CATEGORY + " INTEGER)";
 
-        String SQL_CREATE_CATEGORY_TABLE = "CREATE TABLE " + NewsLaterEntry.TABLE_NAME+ "("
+        String SQL_CREATE_CATEGORY_TABLE = "CREATE TABLE " + CategoryEntry.TABLE_NAME+ "("
                 +CategoryEntry.COLUMN_CATEGORY_ID+ " INTEGER PRIMARY KEY NOT NULL,"
                 +CategoryEntry.COLUMN_CATEGORY_NAME+ " TEXT)";
 

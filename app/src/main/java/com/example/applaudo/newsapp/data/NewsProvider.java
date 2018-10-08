@@ -20,9 +20,6 @@ public class NewsProvider extends ContentProvider {
     private static final int NEWS = 100;
 
     private static final int NEWSLATER = 200;
-    private static final int NEWSLATER_ID = 201;
-
-    private static final int CATEGORY = 300;
 
     private NewsDbHelper mDbHelper;
 
@@ -31,14 +28,10 @@ public class NewsProvider extends ContentProvider {
     static {
 
         //News
-        sUriMatcher.addURI(CONTENT_AUTHORITY, PATH_NEWS,NEWS);
+        sUriMatcher.addURI(CONTENT_AUTHORITY, PATH_NEWS, NEWS);
 
         //NewsLater
-        sUriMatcher.addURI(CONTENT_AUTHORITY, PATH_NEWSLATER,NEWSLATER);
-        sUriMatcher.addURI(CONTENT_AUTHORITY, PATH_NEWSLATER+"/*", NEWSLATER_ID);
-
-        //Category
-        sUriMatcher.addURI(CONTENT_AUTHORITY, PATH_CATEGORY,CATEGORY);
+        sUriMatcher.addURI(CONTENT_AUTHORITY, PATH_NEWSLATER, NEWSLATER);
     }
 
     @Override
@@ -54,29 +47,32 @@ public class NewsProvider extends ContentProvider {
 
         switch (match) {
             case NEWS:
-                getContext().getContentResolver().notifyChange(uri,null);
-                return insertNews(uri,values);
+                getContext().getContentResolver().notifyChange(uri, null);
+                return insertNews(uri, values, NewsEntry.TABLE_NAME);
+
+            case NEWSLATER:
+                getContext().getContentResolver().notifyChange(uri, null);
+                return insertNews(uri, values, NewsLaterEntry.TABLE_NAME);
         }
 
         throw new UnsupportedOperationException("Not yet implemented");
     }
 
-    //Helper method to insert
-    private Uri insertNews(Uri uri, ContentValues values){
+    //Helper method to insert, this is used for both 'news' and 'newslater' table
+    private Uri insertNews(Uri uri, ContentValues values, final String tableName) {
         //Get writable database
         SQLiteDatabase database = mDbHelper.getWritableDatabase();
 
-        Long id = database.insert(NewsEntry.TABLE_NAME,null,values);
+        Long id = database.insert(tableName, null, values);
 
         if (id == -1) {
             Log.e(LOG_TAG, "Failed to insert row for: " + uri);
             return null;
         }
-
         getContext().getContentResolver().notifyChange(uri, null);
-
-        return ContentUris.withAppendedId(uri,id);
+        return ContentUris.withAppendedId(uri, id);
     }
+
 
     @Override
     public Cursor query(Uri uri, String[] projection, String selection, String[] selectionArgs, String sortOrder) {
@@ -85,14 +81,13 @@ public class NewsProvider extends ContentProvider {
         SQLiteDatabase database = mDbHelper.getReadableDatabase();
 
         // This cursor will hold the result of the query
-        Cursor cursor=null;
+        Cursor cursor = null;
         final int match = sUriMatcher.match(uri);
 
         switch (match) {
             case NEWS:
                 cursor = database.query(NewsEntry.TABLE_NAME, projection, selection, selectionArgs, null, null, sortOrder);
         }
-
         return cursor;
 
     }
@@ -100,8 +95,16 @@ public class NewsProvider extends ContentProvider {
 
     @Override
     public int delete(Uri uri, String selection, String[] selectionArgs) {
-        // Implement this to handle requests to delete one or more rows.
-        throw new UnsupportedOperationException("Not yet implemented");
+        final int match = sUriMatcher.match(uri);
+
+        switch (match) {
+            case NEWSLATER:
+                SQLiteDatabase database = mDbHelper.getWritableDatabase();
+                return database.delete(NewsLaterEntry.TABLE_NAME, selection, selectionArgs);
+            default:
+                throw new UnsupportedOperationException("Not yet implemented");
+        }
+
     }
 
     @Override

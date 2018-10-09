@@ -2,7 +2,6 @@ package com.example.applaudo.newsapp.fragments;
 
 import android.content.ContentValues;
 import android.content.Context;
-import android.content.CursorLoader;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -26,12 +25,9 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.applaudo.newsapp.R;
 import com.example.applaudo.newsapp.adapter.NewsAdapter;
-import com.example.applaudo.newsapp.data.NewsContract;
 import com.example.applaudo.newsapp.data.NewsDbHelper;
 import com.example.applaudo.newsapp.loader.NewsLoader;
 import com.example.applaudo.newsapp.main.MainActivity;
@@ -139,6 +135,7 @@ public class NewsFragment extends Fragment implements NewsAdapter.OnNewsClicked,
     }
 
     //Implementation of the interface
+    //TODO:Change params for a single object
     @Override
     public void onNewsClicked(String headline, String bodyText, String section, String thumbnail, String website, String id) {
         //Here I send the data to the DetailsActivity
@@ -202,8 +199,6 @@ public class NewsFragment extends Fragment implements NewsAdapter.OnNewsClicked,
     public void onLoaderReset(Loader<ArrayList<News>> loader) {
     }
 
-
-
     //Helper method to insert the data in the database
     private void insertNewsList(ArrayList<News> data){
 
@@ -213,7 +208,7 @@ public class NewsFragment extends Fragment implements NewsAdapter.OnNewsClicked,
         for (int i = 0; i < data.size() ; i++) {
             ContentValues values = new ContentValues();
             //Checks if the field doesn't exist before doing the insert
-            if(!fieldExists(data.get(i).getId())){
+            if(!fieldExistsInNewsTable(data.get(i).getId())){
                 values.put(NewsEntry.COLUMN_NEWS_ID,data.get(i).getId());
                 values.put(NewsEntry.COLUMN_NEWS_HEADLINE,data.get(i).getHeadline());
                 values.put(NewsEntry.COLUMN_NEWS_BODYTEXT,data.get(i).getBodyText());
@@ -232,7 +227,7 @@ public class NewsFragment extends Fragment implements NewsAdapter.OnNewsClicked,
     }
 
     //Helper method to check if the field already exists in the database
-    private boolean fieldExists(String id){
+    private boolean fieldExistsInNewsTable(String id){
 
         NewsDbHelper mDbHelper = new NewsDbHelper(getContext());
         SQLiteDatabase db = mDbHelper.getReadableDatabase();

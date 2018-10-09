@@ -1,17 +1,19 @@
 package com.example.applaudo.newsapp.data;
 
-import android.app.Activity;
 import android.content.ContentProvider;
 import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.UriMatcher;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.database.sqlite.SQLiteOpenHelper;
 import android.net.Uri;
 import android.util.Log;
 
-import static com.example.applaudo.newsapp.data.NewsContract.*;
+import static com.example.applaudo.newsapp.data.NewsContract.CONTENT_AUTHORITY;
+import static com.example.applaudo.newsapp.data.NewsContract.NewsEntry;
+import static com.example.applaudo.newsapp.data.NewsContract.NewsLaterEntry;
+import static com.example.applaudo.newsapp.data.NewsContract.PATH_NEWS;
+import static com.example.applaudo.newsapp.data.NewsContract.PATH_NEWSLATER;
 
 public class NewsProvider extends ContentProvider {
 
@@ -73,7 +75,6 @@ public class NewsProvider extends ContentProvider {
         return ContentUris.withAppendedId(uri, id);
     }
 
-
     @Override
     public Cursor query(Uri uri, String[] projection, String selection, String[] selectionArgs, String sortOrder) {
 
@@ -113,8 +114,7 @@ public class NewsProvider extends ContentProvider {
 
     @Override
     public String getType(Uri uri) {
-        // at the given URI.
-        throw new UnsupportedOperationException("Not yet implemented");
+        return null;
     }
 
     @Override

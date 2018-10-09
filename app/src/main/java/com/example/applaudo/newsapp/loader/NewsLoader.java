@@ -26,10 +26,12 @@ public class NewsLoader extends AsyncTaskLoader<ArrayList<News>> {
     //Query string
     private String mUrl;
     private int mCategory;
+    private Resources mResources;
 
     public NewsLoader(@NonNull Context context, String mUrl) {
         super(context);
         this.mUrl = mUrl;
+        this.mResources = context.getResources();
     }
 
     //Custom constructor to retrieve the category type from the Fragment
@@ -37,6 +39,7 @@ public class NewsLoader extends AsyncTaskLoader<ArrayList<News>> {
         super(context);
         this.mUrl = mUrl;
         this.mCategory = mCategory;
+        this.mResources = context.getResources();
     }
 
     //Required to trigger the loadInBackground method
@@ -67,7 +70,6 @@ public class NewsLoader extends AsyncTaskLoader<ArrayList<News>> {
                 cursor = getContext().getContentResolver().query(NewsLaterEntry.CONTENT_URI,null,null,null,null);
 
             }
-
             newsList = transformCursorToList(cursor);
 
         } else {
@@ -76,7 +78,7 @@ public class NewsLoader extends AsyncTaskLoader<ArrayList<News>> {
 
         //To make a 'No results message'
         if (newsList.size() == 0) {
-            newsList.add(new News("","","No results. :c","","",""));
+            newsList.add(new News("","",mResources.getString(R.string.str_no_results),"","",""));
         }
 
         return newsList;

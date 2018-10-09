@@ -124,7 +124,6 @@ public class NewsFragment extends Fragment implements NewsAdapter.OnNewsClicked,
             setHasOptionsMenu(true);
 
             loaderManager.initLoader(LOADER_MAIN_ID,null,this);
-            Toast.makeText(getContext(), "Connected", Toast.LENGTH_SHORT).show();
 
         } else {
             loaderManager.initLoader(LOADER_CURSOR_ID,null,this);
@@ -201,7 +200,6 @@ public class NewsFragment extends Fragment implements NewsAdapter.OnNewsClicked,
 
     @Override
     public void onLoaderReset(Loader<ArrayList<News>> loader) {
-        Toast.makeText(getContext(), "Reset", Toast.LENGTH_SHORT).show();
     }
 
 
@@ -218,7 +216,7 @@ public class NewsFragment extends Fragment implements NewsAdapter.OnNewsClicked,
             if(!fieldExists(data.get(i).getId())){
                 values.put(NewsEntry.COLUMN_NEWS_ID,data.get(i).getId());
                 values.put(NewsEntry.COLUMN_NEWS_HEADLINE,data.get(i).getHeadline());
-                values.put(NewsEntry.COLUMN_NEWS_BODYTEXT,"BodyText"); //TODO: Placeholder
+                values.put(NewsEntry.COLUMN_NEWS_BODYTEXT,data.get(i).getBodyText());
                 values.put(NewsEntry.COLUMN_NEWS_SECTION,data.get(i).getSection());
                 values.put(NewsEntry.COLUMN_NEWS_THUMBNAIL,data.get(i).getThumbnail());
                 values.put(NewsEntry.COLUMN_NEWS_WEBSITE,data.get(i).getWebSite());
@@ -227,7 +225,6 @@ public class NewsFragment extends Fragment implements NewsAdapter.OnNewsClicked,
 
                 Uri newUri = getContext().getContentResolver().insert(NewsEntry.CONTENT_URI,values);
 
-                Toast.makeText(getContext(), newUri.toString(), Toast.LENGTH_SHORT).show();
             }
 
         }

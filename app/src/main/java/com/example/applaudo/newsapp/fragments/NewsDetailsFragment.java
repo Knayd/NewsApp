@@ -38,12 +38,12 @@ public class NewsDetailsFragment extends Fragment implements View.OnClickListene
 
 
     private TextView mHeadLine, mBodyText, mSection, mThumbnail, mWebsite;
-    private Button  mAddReadLater, mRemoveReadLater;
+    private Button mAddReadLater, mRemoveReadLater;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.fragment_news_details,container,false);
+        View v = inflater.inflate(R.layout.fragment_news_details, container, false);
 
         //Unpacking the data sent from the activity
         Bundle bundle = getArguments();
@@ -57,8 +57,6 @@ public class NewsDetailsFragment extends Fragment implements View.OnClickListene
 
             mAddReadLater = v.findViewById(R.id.details_fragment_btn_add_read_later);
             mRemoveReadLater = v.findViewById(R.id.details_fragment_btn_remove_read_later);
-
-            Toast.makeText(getContext(), bundle.getString(EXT_DETAILS_ID), Toast.LENGTH_SHORT).show();
 
             mHeadLine.setText(bundle.getString(EXT_DETAILS_HEADLINE));
             mBodyText.setText(bundle.getString(EXT_DETAILS_BODYTEXT));
@@ -77,7 +75,7 @@ public class NewsDetailsFragment extends Fragment implements View.OnClickListene
             mRemoveReadLater.setText(getResources().getString(R.string.str_remove_read_later));
 
             //To hide the buttons if the news exists in in "Read me later"
-            if(!fieldExists(bundle.getString(EXT_DETAILS_ID))){
+            if (!fieldExists(bundle.getString(EXT_DETAILS_ID))) {
                 mAddReadLater.setVisibility(View.VISIBLE);
             } else {
                 mRemoveReadLater.setVisibility(View.VISIBLE);
@@ -88,7 +86,7 @@ public class NewsDetailsFragment extends Fragment implements View.OnClickListene
         return v;
     }
 
-    private News getNewsObject(Bundle bundle){
+    private News getNewsObject(Bundle bundle) {
         News news = new News(
                 bundle.getString(EXT_DETAILS_HEADLINE),
                 bundle.getString(EXT_DETAILS_BODYTEXT),
@@ -105,7 +103,7 @@ public class NewsDetailsFragment extends Fragment implements View.OnClickListene
     @Override
     public void onClick(View view) {
         Bundle bundle = getArguments();
-        switch (view.getId()){
+        switch (view.getId()) {
             case R.id.details_fragment_website:
                 String url = mWebsite.getText().toString();
                 Intent intent = new Intent(Intent.ACTION_VIEW);
@@ -122,14 +120,13 @@ public class NewsDetailsFragment extends Fragment implements View.OnClickListene
                 mRemoveReadLater.setVisibility(View.GONE);
                 deleteNewsLater(getNewsObject(bundle));
                 break;
-
         }
 
     }
 
     //TODO: Unify this method with the one in NewsFragment
     //Helper method to check if the field already exists in the database
-    private boolean fieldExists(String id){
+    private boolean fieldExists(String id) {
 
         NewsDbHelper mDbHelper = new NewsDbHelper(getContext());
         SQLiteDatabase db = mDbHelper.getReadableDatabase();
@@ -141,7 +138,7 @@ public class NewsDetailsFragment extends Fragment implements View.OnClickListene
         String selection = "id=?";
         String[] args = {id};
 
-        Cursor news =  db.query(NewsLaterEntry.TABLE_NAME,projection,selection,args,null,null,null);
+        Cursor news = db.query(NewsLaterEntry.TABLE_NAME, projection, selection, args, null, null, null);
 
         //This is so I can close the cursor
         int checkCursor = news.getCount();
@@ -150,34 +147,32 @@ public class NewsDetailsFragment extends Fragment implements View.OnClickListene
         return checkCursor != 0;
     }
 
-    private void insertNewsLater(News news){
+    private void insertNewsLater(News news) {
 
-            ContentValues values = new ContentValues();
-            //Checks if the field doesn't exist before doing the insert
-            if(!fieldExists(news.getId())){
-                values.put(NewsLaterEntry.COLUMN_NEWSLATER_ID,news.getId());
-                values.put(NewsEntry.COLUMN_NEWS_HEADLINE,news.getHeadline());
-                values.put(NewsLaterEntry.COLUMN_NEWSLATER_BODYTEXT,"BodyText"); //TODO: Placeholder
-                values.put(NewsLaterEntry.COLUMN_NEWSLATER_SECTION,news.getSection());
-                values.put(NewsLaterEntry.COLUMN_NEWSLATER_THUMBNAIL,news.getThumbnail());
-                values.put(NewsLaterEntry.COLUMN_NEWSLATER_WEBSITE,news.getWebSite());
+        ContentValues values = new ContentValues();
+        //Checks if the field doesn't exist before doing the insert
+        if (!fieldExists(news.getId())) {
+            values.put(NewsLaterEntry.COLUMN_NEWSLATER_ID, news.getId());
+            values.put(NewsEntry.COLUMN_NEWS_HEADLINE, news.getHeadline());
+            values.put(NewsLaterEntry.COLUMN_NEWSLATER_BODYTEXT, news.getBodyText());
+            values.put(NewsLaterEntry.COLUMN_NEWSLATER_SECTION, news.getSection());
+            values.put(NewsLaterEntry.COLUMN_NEWSLATER_THUMBNAIL, news.getThumbnail());
+            values.put(NewsLaterEntry.COLUMN_NEWSLATER_WEBSITE, news.getWebSite());
 
-                Uri newUri = getContext().getContentResolver().insert(NewsLaterEntry.CONTENT_URI,values);
-
-                Toast.makeText(getContext(), newUri.toString(), Toast.LENGTH_SHORT).show();
-            }
+            Uri newUri = getContext().getContentResolver().insert(NewsLaterEntry.CONTENT_URI, values);
 
         }
 
-        private void deleteNewsLater (News news) {
-            if(fieldExists(news.getId())){
+    }
 
-                String where = NewsLaterEntry.COLUMN_NEWSLATER_ID+"=?";
-                String[] args = {news.getId()};
+    private void deleteNewsLater(News news) {
+        if (fieldExists(news.getId())) {
 
-                int rowsDeleted = getContext().getContentResolver().delete(NewsLaterEntry.CONTENT_URI,where,args);
+            String where = NewsLaterEntry.COLUMN_NEWSLATER_ID + "=?";
+            String[] args = {news.getId()};
 
-                Toast.makeText(getContext(), String.valueOf(rowsDeleted), Toast.LENGTH_SHORT).show();
-            }
+            int rowsDeleted = getContext().getContentResolver().delete(NewsLaterEntry.CONTENT_URI, where, args);
+
         }
+    }
 }

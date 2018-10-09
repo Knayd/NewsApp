@@ -3,12 +3,12 @@
     <string name="app_name">NewsApp</string>
     <string name="tab1">Deportes</string>
     <string name="tab2">Política</string>
-    <string name="tab3">Social</string>
+    <string name="tab3">Sociedad</string>
     <string name="tab4">Música</string>
-    <string name="str_menu_search">Buscar noticias!</string>
-    <string name="str_no_connection">Verifica tu conexión a Internet.</string>
-    <string name="str_no_results">Sin resultados.</string>
-    <string name="str_add_read_later">Leer después</string>
-    <string name="str_remove_read_later">Remover de \"Leer después\"</string>
-    <string name="str_read_later_tab">Leer después</string>
+    <string name="str_menu_search">Buscar noticias</string>
+    <string name="str_no_connection">Verifica tu conexión</string>
+    <string name="str_no_results">Nada para mostrar.</string>
+    <string name="str_add_read_later">Leer más tarde</string>
+    <string name="str_remove_read_later">Remover de \"Leer más tarde\"</string>
+    <string name="str_read_later_tab">Leer más tarde</string>
 </resources>

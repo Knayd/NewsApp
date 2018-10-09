@@ -7,8 +7,6 @@
     android:orientation="vertical"
     tools:context=".fragments.NewsFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-
     <android.support.v7.widget.RecyclerView
         android:id="@+id/fragment_recycler"
         android:background="@color/colorAccent"

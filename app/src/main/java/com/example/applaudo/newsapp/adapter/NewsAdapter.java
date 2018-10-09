@@ -30,7 +30,6 @@ public class NewsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         notifyDataSetChanged();
     }
 
-
     //Interface to open the details
     public interface OnNewsClicked {
         void onNewsClicked(String headline, String bodyText, String section, String thumbnail, String website,String id);
@@ -95,14 +94,12 @@ public class NewsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     class NewsViewHolder extends RecyclerView.ViewHolder {
         private TextView mHeadLine, mSection;
-        private ImageView mThumbnail;
         private View mLayout;
 
         NewsViewHolder(View itemView) {
             super(itemView);
             mHeadLine = itemView.findViewById(R.id.recycler_headline);
             mSection = itemView.findViewById(R.id.recycler_section);
-            mThumbnail = itemView.findViewById(R.id.recycler_thumbnail);
             mLayout = itemView.findViewById(R.id.recycler_item_layout);
         }
 
@@ -110,7 +107,6 @@ public class NewsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         void bindView(final ArrayList<News> list, final int position) {
             mHeadLine.setText(list.get(position).getHeadline());
             mSection.setText(list.get(position).getSection());
-            mThumbnail.setImageResource(R.mipmap.ic_launcher_round); //TODO: just a placeholder
 
             //Listens when an item is clicked on the recycler and sends the data of the current item
             mLayout.setOnClickListener(new View.OnClickListener() {

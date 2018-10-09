@@ -87,8 +87,10 @@ public class NewsProvider extends ContentProvider {
         switch (match) {
             case NEWS:
                 cursor = database.query(NewsEntry.TABLE_NAME, projection, selection, selectionArgs, null, null, sortOrder);
+                break;
             case NEWSLATER:
                 cursor = database.query(NewsLaterEntry.TABLE_NAME,projection,selection,selectionArgs,null,null,sortOrder);
+                break;
         }
         return cursor;
 

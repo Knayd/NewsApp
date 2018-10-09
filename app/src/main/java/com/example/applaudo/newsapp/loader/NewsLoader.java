@@ -68,10 +68,15 @@ public class NewsLoader extends AsyncTaskLoader<ArrayList<News>> {
 
             }
 
-            return transformCursorToList(cursor);
+            newsList = transformCursorToList(cursor);
 
         } else {
             newsList = QueryUtils.fetchNewsData(mUrl);
+        }
+
+        //To make a 'No results message'
+        if (newsList.size() == 0) {
+            newsList.add(new News("","","No results. :c","","",""));
         }
 
         return newsList;
